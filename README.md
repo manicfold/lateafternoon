@@ -23,11 +23,30 @@ theme, see [Numix Project](numixproject.org).
 Some shapes of application icons are inspired by the [FlatWoken 
 theme](https://github.com/alecive/FlatWoken).
 
-##TODO
-
+## TODO
 * Icons that should be made (by priority, important first)
   - Brightness & Lock (system-lock-screen)
   - Big trash icon
   - ...
 
 * Reconstruct color palette from numix icons?
+
+
+## Technicalities
+If you clone the repo, you will see that the theme contains no soft links as 
+other themes do. To make life easier for me, I wrote a shell script called 
+`distribute.sh` and there are `make_links` files in the subfolders which do the 
+actual linking. So if you cloned it and want to use the theme, go into the top 
+folder and type
+
+> ./distribute -s -i
+
+This will copy the SVGs in the subfolders defined in index.theme,  scour them 
+([Scour](http://www.codedread.com/scour/) has to be installed) and create a 
+bunch of symbolic links. There are also other options, see `./distribute -h`.
+
+## Contact and Download
+
+You can find a packaged version of the theme at 
+[Deviantart](http://manicfold.deviantart.com/art/LateAfternoon-444389530).  
+There you can also reach me throught the comments.
