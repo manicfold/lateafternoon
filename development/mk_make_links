@@ -1,0 +1,14 @@
+#!/bin/bash
+
+echo -e "#!/bin/bash\n\n" > make_links
+
+for i in *.svg; do
+    if [ -L "$i" ]; then
+        l=`readlink "$i"`;
+        echo "ln -s $l $i" >> make_links
+        rm -f "$i"
+    fi
+done
+
+sort make_links -o make_links
+chmod +x make_links

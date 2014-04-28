@@ -1,0 +1,15 @@
+
+
+#!/bin/bash
+ln -s emblem-default.svg emblem-ok.svg
+ln -s emblem-documents.svg emblem-document.svg
+ln -s emblem-documents.svg emblem-draft.svg
+ln -s emblem-favorite.svg emblem-favorites.svg
+ln -s emblem-marketing.svg emblem-sales.svg
+ln -s emblem-pictures.svg emblem-photos.svg
+ln -s ./emblem-readonly.svg emblem-dropbox-unsyncable.svg
+ln -s ./emblem-readonly.svg emblem-nowrite.svg
+ln -s ./emblem-ubuntuone-synchronized.svg emblem-dropbox-uptodate.svg
+ln -s ./emblem-ubuntuone-updating.svg emblem-dropbox-syncing.svg
+ln -s ./emblem-ubuntuone-updating.svg emblem-synchronizing.svg
+ln -s emblem-unreadable.svg emblem-noread.svg

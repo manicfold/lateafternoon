@@ -1,0 +1,40 @@
+Colors:
+    light brown         c19553
+    orange              ff6501
+    faded orange        ce6b20
+    violet              9b4a85
+    faded dark red      a4373a
+    red                 e01818
+    yellow              eeaf02
+    cyan                05aa9d
+    faded blue green    39a34f
+    faded green         7c9d35
+
+
+
+Layers:
+    - highlight
+    - icon graphic
+    - shadow
+    - base
+
+Highlight:
+    - 0.5px wide border path with size of base, white to white transparent 
+      vertical gradient that highlights the upper edge, 40% opacity
+      
+Icon graphic:
+    - simple path, white
+
+Shadow:
+    - for the shadow path extrude icon graphic path 45°, intersect with copy of  
+      base path, color black, 30% opacity
+    - copy icon graphic path to shadow layer, color black, gauss blur 25.0, 
+      clip to copy of shadow path
+
+Base:
+    - 48x48 rectangle, rounded corners, radius 2px
+
+
+Text:
+    - TheMix Plain
+

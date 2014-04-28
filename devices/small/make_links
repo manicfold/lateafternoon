@@ -1,0 +1,7 @@
+#!/bin/bash
+
+if [ -e "drive-harddisk.svg" ]; then ln -s "drive-harddisk.svg" "drive-harddisk-ieee1394.svg"; fi
+if [ -e "drive-harddisk.svg" ]; then ln -s "drive-harddisk.svg" "drive-harddisk-root.svg"; fi
+if [ -e "drive-harddisk.svg" ]; then ln -s "drive-harddisk.svg" "drive-harddisk-scsi.svg"; fi
+if [ -e "drive-harddisk.svg" ]; then ln -s "drive-harddisk.svg" "drive-harddisk-system.svg"; fi
+if [ -e "drive-harddisk.svg" ]; then ln -s "drive-harddisk.svg" "harddrive.svg"; fi

@@ -1,0 +1,33 @@
+
+
+#!/bin/bash
+ln -s applications-accessories.svg gnome-util.svg
+ln -s applications-accessories.svg package_utilities.svg
+ln -s applications-accessories.svg redhat-accessories.svg
+ln -s applications-accessories.svg xfce-utils.svg
+ln -s applications-development.svg gnome-devel.svg
+ln -s applications-development.svg package_development.svg
+ln -s applications-development.svg redhat-programming.svg
+ln -s applications-development.svg xfce-devel.svg
+ln -s applications-games.svg gnome-joystick.svg
+ln -s applications-games.svg package_games.svg
+ln -s applications-games.svg redhat-games.svg
+ln -s applications-games.svg xfce-games.svg
+ln -s applications-internet.svg applications-webbrowsers.svg
+ln -s applications-internet.svg gnome-globe.svg
+ln -s applications-internet.svg package_network.svg
+ln -s applications-internet.svg redhat-internet.svg
+ln -s applications-internet.svg stock_internet.svg
+ln -s applications-internet.svg xfce-internet.svg
+ln -s applications-multimedia.svg gnome-multimedia.svg
+ln -s applications-multimedia.svg multimedia_section.svg
+ln -s applications-multimedia.svg package_multimedia.svg
+ln -s applications-multimedia.svg redhat-sound_video.svg
+ln -s applications-multimedia.svg xfce-multimedia.svg
+ln -s applications-office.svg package_office.svg
+ln -s applications-office.svg redhat-office.svg
+ln -s applications-office.svg xfce-office.svg
+ln -s applications-other.svg gnome-other.svg
+ln -s gnome-settings.svg gtk-preferences.svg
+ln -s preferences-system.svg package_settings.svg
+ln -s system-help.svg documentation_section.svg

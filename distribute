@@ -1,0 +1,194 @@
+#!/bin/bash
+
+## Usage: distribute [-hnsci] [-p [<type>]] [-t <dir>] [-n <name>]
+##
+## Options
+##      -h       Display this help.
+##      -s       Simplify SVG files with 'scour'.
+##      -d       Dirty. Do not clean up aftwerward.
+##      -i       Install the icon theme.
+##      -p <type> Create a package. Possible types: zip, 7z, tgz
+##      -t <dir> Use <dir> as temporary directory. Default is /tmp.
+##      -n <name> Use name as the icon theme's name.
+
+USAGE=$(grep "^## " "${BASH_SOURCE[0]}" | cut -c 4-)
+
+# ---------------------------------------------------------- setting up 
+THEME_DIR=`pwd`
+THEME_NAME=${THEME_DIR##*/}
+TMP_DEFAULT=/tmp
+DO_SCOUR=false
+DO_PACKAGE=false
+PKG_TYPE=zip
+DO_CLEANUP=true
+DO_INSTALL=false
+
+while getopts ":hsdp:it:n:" optchar; do
+    case "$optchar" in
+        h)
+            echo "$USAGE"
+            exit
+            ;;
+        s)
+            DO_SCOUR=true
+            ;;
+        d)
+            DO_CLEANUP=false
+            ;;
+        p)
+            DO_PACKAGE=true
+            PKG_TYPE="$OPTARG"
+            ;;
+        i)
+            DO_INSTALL=true
+            ;;
+        t)
+            TMP_DEFAULT="$OPTARG"
+            ;;
+        n)
+            THEME_NAME="$OPTARG"
+            ;;
+        :)
+            # recognize -p also without option.
+            if [ "$OPTARG" = "p" ]; then DO_PACKAGE=true; fi
+            ;;
+        *)
+            if [ "$OPTERR" != 1 ] || [ "${optspec:0:1}" = ":" ]; then
+                echo "Non-option argument: '-${OPTARG}'" >&2
+            fi
+            ;;
+    esac
+done
+
+TMP_DIR=$TMP_DEFAULT/$THEME_NAME
+
+echo -e "Theme name:\t\t$THEME_NAME"
+echo -e "Source directory:\t$THEME_DIR"
+echo -e "Working directory:\t$TMP_DIR"
+
+# read subdirectories from index.theme into array
+subdirstring=$(awk -F "=" '/Directories/ {print $2}' $THEME_DIR/index.theme)
+IFS=","
+SUB_DIRS=($subdirstring)
+
+# -------------------------------------- copy all icons to a temporary location
+if [ -d "$TMP_DIR" ]; then
+    echo "Removing rests of previous packaging."
+    rm -rf "$TMP_DIR"
+fi
+
+echo "Copying icons"
+mkdir "$TMP_DIR"
+for subdir in "${SUB_DIRS[@]}"; do
+    cp -r --parents "$subdir" "$TMP_DIR"
+done;
+cp "$THEME_DIR/index.theme" "$TMP_DIR"
+
+# change the theme's name in the index file
+sed -i "s/Name=.*$/Name=$THEME_NAME/" "$TMP_DIR/index.theme"
+
+# --------------------------------------------------- clean up the icons' files
+scour_svg ()
+{ # remove unnecessary cruft from svg
+    # check param
+    if [ -z "$1" ]; then
+        echo $FUNCNAME needs one parameter!
+        exit
+    fi
+    SRC="$1"
+    TGT="${1}__"
+    
+    [ ! -f "$SRC" ] && echo "$SRC is not a regular file";
+
+    scour --quiet --enable-id-stripping --enable-comment-stripping \
+        --remove-metadata --renderer-workaround --strip-xml-prolog \
+        -i "$SRC" -o "$TGT"
+    mv -f "$TGT" "$SRC"
+}
+
+printf "Scouring SVGs"
+if $DO_SCOUR ; then
+    printf "\n"
+    cd "$TMP_DIR"
+    for subdir in "${SUB_DIRS[@]}"; do
+        # Find all non-symlink svg files into array.
+        # the redirection construct used here (cmd1 < <(cmd2)) is similar to, but 
+        # not quite the same as the more usual pipeline (cmd2 | cmd1) -- if the 
+        # commands are shell builtins (e.g. while), the pipeline version executes 
+        # them in subshells, and any variables they set (e.g. the array svg_arr) 
+        # are lost when they exit. cmd1 < <(cmd2) only runs cmd2 in a subshell, so 
+        # the array lives past its construction. Warning: this form of redirection 
+        # is only available in bash; you must start your script with #!/bin/bash.
+        svg_arr=( )
+        while IFS= read -r -d $'\0' file; do
+            svg_arr+=("$file")
+        done < <(find "$subdir" -type f -name "*.svg" -print0)
+        num_svg=${#svg_arr[@]}
+        msg="Working in $TMP_DIR/$subdir ($num_svg files)"
+        for (( i=0; i < "$num_svg"; ++i )); do
+            p=$((i*100 / num_svg))
+            echo -ne "$msg -  $p%" '\r'
+            scour_svg "${svg_arr[$i]}"
+        done
+        echo "$msg - 100%"
+    done
+else
+    printf " \033[31m[disabled]\033[0m\n"
+fi
+
+# ------------------------------------------------------------- create symlinks
+for subdir in "${SUB_DIRS[@]}"; do
+    if [ -x "$TMP_DIR/$subdir/make_links" ]; then
+        cd "$TMP_DIR/$subdir"
+        echo "Creating symbolic links in $subdir"
+        ./make_links;
+        rm -f make_links
+    fi
+done
+
+# ----------------------------------------------------------- package the files
+printf "Creating package file."
+if $DO_PACKAGE; then
+    printf "\n"
+    cd "$TMP_DIR/.."
+    case "$PKG_TYPE" in
+        zip)
+            zip -r -y -9 -q "$THEME_NAME".zip "$THEME_NAME"
+            mv "$THEME_NAME".zip "$THEME_DIR"
+            ;;
+        7z)
+            7z a -r "$THEME_NAME".7z "$THEME_NAME" >/dev/null
+            mv "$THEME_NAME".7z "$THEME_DIR";;
+        tgz)
+            tar -czf "$THEME_NAME".tar.gz "$THEME_NAME"
+            mv "$THEME_NAME".tar.gz "$THEME_DIR"
+            ;;
+    esac
+else
+    printf " \033[31m[disabled]\033[0m\n"
+fi
+    
+# ------------------------------------------------------------------ installing
+printf "Installing to ~/.icons."
+if $DO_INSTALL; then
+    printf "\n"
+    if [ -e "~/.icons/$THEME_NAME" ]; then
+        rm -rf "~/.icons/$THEME_NAME"
+    fi
+    cd "$TMP_DEFAULT"
+    cp -r --parents "$THEME_NAME" ~/.icons
+    gtk-update-icon-cache ~/.icons/$THEME_NAME
+else
+    printf " \033[31m[disabled]\033[0m\n"
+fi
+
+# ----------------------------------------------------------------- cleaning up
+printf "Cleaning up."
+if $DO_CLEANUP; then
+    printf "\n"
+    rm -rf "$TMP_DIR"
+else
+    printf " \033[31m[disabled]\033[0m\n"
+fi
+
+echo -e "\033[32mDone\033[0m."
