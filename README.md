@@ -1,5 +1,6 @@
 #Late Afternoon
 
+## Design rationale
 This is an icon theme for linux systems using freedesktop's icon naming scheme, 
 as well as GNOME/KDE specific names.
 
@@ -15,7 +16,14 @@ and relatively flat with a central shape identifying the application. The
 central shape has a "long shadow" as an eye catcher which points diagonally to 
 the south-east corner.
 
-#TODO
+## Imported icons from other themes
+All status, symbolic, mimetype and actions icons are taken from the Numix 
+theme, see [Numix Project](numixproject.org).
+
+Some shapes of application icons are inspired by the [FlatWoken 
+theme](https://github.com/alecive/FlatWoken).
+
+##TODO
 
 * Icons that should be made (by priority, important first)
   - Brightness & Lock (system-lock-screen)
