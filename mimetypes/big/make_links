@@ -1,5 +1,3 @@
-
-
 #!/bin/bash
 ln -s application-archive.svg application-7zip.svg
 ln -s application-archive.svg application-archive-blank.svg
@@ -319,8 +317,12 @@ ln -s text-x-changelog.svg gnome-mime-text-x-changelog.svg
 ln -s text-x-csharp.svg gnome-mime-text-x-csharp.svg
 ln -s text-x-css.svg text-css.svg
 ln -s text-x-c.svg gnome-mime-text-x-c.svg
+ln -s text-x-c.svg text-x-csrc.svg
 ln -s text-x-c++.svg gnome-mime-text-x-c++.svg
+ln -s text-x-c++.svg text-x-c++src.svg
 ln -s text-x-gtkrc.svg gnome-mime-text-x-gtkrc.svg
+ln -s text-x-h.svg text-x-chdr.svg
+ln -s text-x-h.svg text-x-c++hdr.svg
 ln -s text-x-install.svg gnome-mime-text-x-install.svg
 ln -s text-x-javascript.svg application-x-javascript.svg
 ln -s text-x-javascript.svg gnome-mime-application-x-javascript.svg

@@ -929,6 +929,7 @@ if [ -e "sound.svg" ]; then ln -s "sound.svg" "unity-sound-panel.svg"; fi
 if [ -e "sound.svg" ]; then ln -s "sound.svg" "volume-knob.svg"; fi
 if [ -e "sound.svg" ]; then ln -s "sound.svg" "xfce-sound.svg"; fi
 if [ -e "sound.svg" ]; then ln -s "sound.svg" "xfce4-mixer.svg"; fi
+if [ -e "vim.svg" ]; then ln -s "vim.svg" "gvim.svg"; fi
 if [ -e "wacom-tablet.svg" ]; then ln -s "wacom-tablet.svg" "input-tablet.svg"; fi
 if [ -e "wacom-tablet.svg" ]; then ln -s "wacom-tablet.svg" "tablet.svg"; fi
 if [ -e "weather.svg" ]; then ln -s "weather.svg" "gnome-weather.svg"; fi
